@@ -22,4 +22,4 @@ async def health_check():
 # Root endpoint to serve favicon
 @app.get("/")
 async def root():
-    return FileResponse("app/static/favicon-32x32.ico")
+    return FileResponse("app/static/favicon-1-32x32.ico")
