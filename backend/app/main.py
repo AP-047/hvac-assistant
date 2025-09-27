@@ -2,9 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from .routes.chat import router as chat_router
 
 app = FastAPI(title="HVAC Design Assistant API")
 
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,14 +14,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve static files (including favicon)
+# Mount static files (e.g., favicon, CSS, JS)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+# Include chat API routes under /api
+app.include_router(chat_router, prefix="/api")
 
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
 
-# Root endpoint to serve favicon
 @app.get("/")
 async def root():
+    # Serve favicon or landing icon at root
     return FileResponse("app/static/favicon-1-32x32.ico")
