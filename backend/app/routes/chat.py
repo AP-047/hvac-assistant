@@ -1,8 +1,8 @@
 # backend/app/routes/chat.py
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from ..services.retrieval import retrieve_chunks
-from ..services.llm import generate_answer
+from app.services.retrieval import retrieve_chunks
+from app.services.llm import generate_answer
 
 router = APIRouter()
 
