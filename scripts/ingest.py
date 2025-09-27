@@ -9,6 +9,7 @@ from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import VectorParams, Distance
 from qdrant_client.http.exceptions import UnexpectedResponse
+from qdrant_client.http.exceptions import ResponseHandlingException
 import uuid
 
 # Load environment
@@ -48,16 +49,22 @@ def chunk_text(text: str, max_len: int = 500) -> list:
     return chunks
 
 def create_collection_if_not_exists():
-    """Create Qdrant collection if it doesn't exist"""
+    """Create Qdrant collection if it doesn't exist or if config parsing fails."""
     try:
         client.get_collection(COLLECTION_NAME)
         print(f"Collection '{COLLECTION_NAME}' already exists")
-    except UnexpectedResponse:
-        client.create_collection(
-            collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=384, distance=Distance.COSINE),
-        )
-        print(f"Created collection '{COLLECTION_NAME}'")
+    except (ResponseHandlingException, UnexpectedResponse):
+        # Either it genuinely doesn’t exist or parsing failed due to version mismatch
+        try:
+            client.create_collection(
+                collection_name=COLLECTION_NAME,
+                vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+            )
+            print(f"Created collection '{COLLECTION_NAME}'")
+        except Exception as e:
+            print(f"Error creating collection: {e}")
+            raise
+
 
 def ingest_documents(source_dir: str):
     """Ingest new or modified documents"""
