@@ -141,4 +141,4 @@ def ingest_documents(source_dir: str):
     print(f"\nIngestion complete! Processed {len([f for f in new_metadata if f not in metadata])} new/modified files")
 
 if __name__ == "__main__":
-    ingest_documents("../docs/sources")
+    ingest_documents("/app/docs/sources")
