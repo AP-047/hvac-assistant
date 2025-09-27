@@ -8,8 +8,7 @@ from PyPDF2 import PdfReader
 from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import VectorParams, Distance
-from qdrant_client.http.exceptions import UnexpectedResponse
-from qdrant_client.http.exceptions import ResponseHandlingException
+from qdrant_client.http.exceptions import ResponseHandlingException, UnexpectedResponse
 import uuid
 
 # Load environment
@@ -48,23 +47,34 @@ def chunk_text(text: str, max_len: int = 500) -> list:
         chunks.append(" ".join(words[i : i + max_len]))
     return chunks
 
+
 def create_collection_if_not_exists():
-    """Create Qdrant collection if it doesn't exist or if config parsing fails."""
+    """Ensure Qdrant collection exists; ignore config parse or already-exists errors."""
     try:
         client.get_collection(COLLECTION_NAME)
         print(f"Collection '{COLLECTION_NAME}' already exists")
-    except (ResponseHandlingException, UnexpectedResponse):
-        # Either it genuinely doesn’t exist or parsing failed due to version mismatch
-        try:
-            client.create_collection(
-                collection_name=COLLECTION_NAME,
-                vectors_config=VectorParams(size=384, distance=Distance.COSINE),
-            )
-            print(f"Created collection '{COLLECTION_NAME}'")
-        except Exception as e:
-            print(f"Error creating collection: {e}")
-            raise
+    except ResponseHandlingException:
+        # Parsing error from older/newer Qdrant schemas
+        print(f"Warning: Could not parse existing collection config, assuming it exists")
+        return
+    except UnexpectedResponse:
+        # Collection does not exist at all
+        pass
 
+    # If we reach here, either get_collection failed with UnexpectedResponse or
+    # we explicitly want to create it
+    try:
+        client.create_collection(
+            collection_name=COLLECTION_NAME,
+            vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+        )
+        print(f"Created collection '{COLLECTION_NAME}'")
+    except UnexpectedResponse as e:
+        # 409 Conflict means it already exists—safe to ignore
+        if "already exists" in str(e):
+            print(f"Collection '{COLLECTION_NAME}' already exists (409), continuing")
+        else:
+            raise
 
 def ingest_documents(source_dir: str):
     """Ingest new or modified documents"""
