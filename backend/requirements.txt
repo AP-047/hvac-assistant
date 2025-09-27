@@ -10,3 +10,5 @@ langchain-community==0.0.10
 pypdf==3.17.4
 PyPDF2==3.0.1
 python-multipart==0.0.6
+transformers
+torch

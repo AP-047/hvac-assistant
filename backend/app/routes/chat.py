@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import os
 import openai  # or your local LLM import
-from ..services.retrieval import retrieve_chunks
+from ..services.llm import retrieve_chunks
 
 router = APIRouter()
 
