@@ -9,6 +9,7 @@ from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import VectorParams, Distance
 from qdrant_client.http.exceptions import UnexpectedResponse
+import uuid
 
 # Load environment
 load_dotenv()
@@ -109,7 +110,7 @@ def ingest_documents(source_dir: str):
             for idx, chunk in enumerate(chunks):
                 if chunk.strip():  # Only process non-empty chunks
                     vector = embedder.encode(chunk).tolist()
-                    point_id = f"{pdf_path.stem}_{idx}"
+                    point_id = str(uuid.uuid4())
                     
                     points.append({
                         "id": point_id,
