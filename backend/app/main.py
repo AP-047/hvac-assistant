@@ -10,7 +10,11 @@ app = FastAPI(title="HVAC Design Assistant API")
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    # allow_origins=["*"],
+    allow_origins=["http://frontend:3000"], # Docker container origin
+    # allow_origins=["http://backend:8000/api/chat"],
+    # allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
