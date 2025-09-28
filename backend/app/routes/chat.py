@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, HttpUrl
-from typing import List
+from typing import List, Optional
 from app.services.retrieval import retrieve_chunks
 from app.services.llm import generate_answer
 
@@ -8,7 +8,7 @@ router = APIRouter()
 
 class Source(BaseModel):
     title:    str
-    url:      HttpUrl
+    url:      Optional[HttpUrl] = None
     chunk_id: int
     snippet:  str
 
@@ -25,20 +25,26 @@ async def chat(request: ChatRequest):
     if not chunks:
         raise HTTPException(status_code=404, detail="No relevant documents found")
 
-    # Build prompt context from full chunk text
     context = "\n\n".join(c["text"] for c in chunks)
     prompt = f"Context:\n{context}\n\nQuestion: {request.query}\nAnswer:"
     answer = generate_answer(prompt)
 
-    # Build rich source objects with snippet previews
-    sources = [
-        Source(
-            title=c["title"],
-            url=c["url"],
-            chunk_id=c["chunk_id"] + 1,
-            snippet=(c["text"][:200] + "…").replace("\n", " ")
-        )
-        for c in chunks
-    ]
-
+    # Build sources safely
+    sources: List[Source] = []
+    for c in chunks:
+        text = c.get("text", "")
+        if not text:
+            continue
+        raw_url = c.get("url") or None     # convert empty string to None
+        # Only include entries with a valid URL
+        if not raw_url:
+            continue
+        snippet = (text[:200] + "…").replace("\n", " ")
+        sources.append(Source(
+            title=c.get("title", "Unknown"),
+            url=raw_url,
+            chunk_id=c.get("chunk_id", 0) + 1,
+            snippet=snippet,
+        ))
+        
     return ChatResponse(answer=answer, sources=sources)
