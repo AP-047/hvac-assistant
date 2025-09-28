@@ -11,6 +11,64 @@ from qdrant_client.http.models import VectorParams, Distance
 from qdrant_client.http.exceptions import ResponseHandlingException, UnexpectedResponse
 import uuid
 
+PDF_SOURCES = [
+    {
+        "title": "NASA Goddard Space Flight Center Cleanroom Filtration and HVAC Designs (2024)",
+        "url":   "https://ntrs.nasa.gov/api/citations/20240010626/downloads/ASHRAE%20CEIC%20Presentation_Rev0.pdf",
+        "path":  "docs/sources/NASA_Goddard_Space_Flight_Center_Cleanroom_Filtration_&_HVAC_Designs_(2024).pdf",
+    },
+    {
+        "title": "Operations Support Building HVAC Analysis (1986)",
+        "url":   "https://ntrs.nasa.gov/api/citations/19860018818/downloads/19860018818.pdf",
+        "path":  "docs/sources/Operations_Support_Building_HVAC_Analysis_(1986).pdf",
+    },
+    {
+        "title": "Residential Heating & Cooling System (1972)",
+        "url":   "https://ntrs.nasa.gov/api/citations/19730009184/downloads/19730009184.pdf",
+        "path":  "docs/sources/Residential_Heating_&_Cooling_System_(1972).pdf",
+    },
+    {
+        "title": "Air Conditioning System & Component (1974)",
+        "url":   "https://ntrs.nasa.gov/api/citations/19740019789/downloads/19740019789.pdf",
+        "path":  "docs/sources/Air_Conditioning_System_&_Component_(1974).pdf",
+    },
+    {
+        "title": "Solar-Powered Residential Air Conditioner (1975)",
+        "url":   "https://ntrs.nasa.gov/api/citations/19760013544/downloads/19760013544.pdf",
+        "path":  "docs/sources/Solar-Powered_Residential_Air_Conditioner_(1975).pdf",
+    },
+    {
+        "title": "HVAC Functional Inspection & Testing Guide (NIST)",
+        "url":   "https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir4758.pdf",
+        "path":  "docs/sources/HVAC_Functional_Inspection_&_Testing_Guide_(NIST).pdf",
+    },
+    {
+        "title": "VA HVAC Design Manual (2024)",
+        "url":   "https://www.cfm.va.gov/til/dmanual/dmHVAC.pdf",
+        "path":  "docs/sources/VA_HVAC_Design_Manual_(2024).pdf",
+    },
+    {
+        "title": "NSPIRE Standard – HVAC (HUD, 2021)",
+        "url":   "https://www.hud.gov/sites/dfiles/PIH/documents/NSPIRE-Standards-v2.1-HVAC.pdf",
+        "path":  "docs/sources/NSPIRE_Standard–HVAC_(HUD,2021).pdf",
+    },
+    {
+        "title": "UFC 3-410-01 HVAC Criteria (2013)",
+        "url":   "https://www.wbdg.org/FFC/DOD/UFC/ufc_3_410_01_2013_c9.pdf",
+        "path":  "docs/sources/UFC_3-410-01_HVAC_Criteria_(2013).pdf",
+    },
+    {
+        "title": "EMU HVAC Standards (2008)",
+        "url":   "https://www.emich.edu/physical-plant/documents/construction-standards/division-23-heating-ventilation-and-air-conditioning.pdf",
+        "path":  "docs/sources/EMU_HVAC_Standards_(2008).pdf",
+    },
+    {
+        "title": "EU Ecodesign Guidelines for HVAC",
+        "url":   "https://energy-efficient-products.ec.europa.eu/document/download/70f79d6b-75c7-4804-b3a0-f8d187a87a70_en",
+        "path":  "docs/sources/EU_Ecodesign_HVAC.pdf",
+    },
+]
+
 # Load environment
 load_dotenv()
 
@@ -84,75 +142,57 @@ def ingest_documents(source_dir: str):
     metadata = load_metadata()
     new_metadata = {}
     
-    source_path = Path(source_dir)
-    pdf_files = list(source_path.glob("*.pdf"))
-    
-    if not pdf_files:
-        print(f"No PDF files found in {source_dir}")
-        return
-    
-    print(f"Found {len(pdf_files)} PDF files")
-    
-    for pdf_path in pdf_files:
-        file_hash = get_file_hash(pdf_path)
+    # Loop over your predefined PDF_SOURCES
+    for src in PDF_SOURCES:
+        pdf_path = Path(src["path"])
         filename = pdf_path.name
-        
-        # Check if file needs processing
+        file_hash = get_file_hash(pdf_path)
+
+        # Skip unchanged files (as before)...
         if filename in metadata and metadata[filename] == file_hash:
             print(f"Skipping {filename} (unchanged)")
             new_metadata[filename] = file_hash
             continue
-        
+
         print(f"Processing {filename}...")
-        
-        try:
-            # Extract text from PDF
-            reader = PdfReader(str(pdf_path))
-            full_text = ""
-            for page in reader.pages:
-                text = page.extract_text()
-                if text:
-                    full_text += text + "\n"
-            
-            if not full_text.strip():
-                print(f"Warning: No text extracted from {filename}")
-                continue
-            
-            # Chunk and embed
-            chunks = chunk_text(full_text)
-            print(f"  Created {len(chunks)} chunks")
-            
-            # Create embeddings and upsert to Qdrant
-            points = []
-            for idx, chunk in enumerate(chunks):
-                if chunk.strip():  # Only process non-empty chunks
-                    vector = embedder.encode(chunk).tolist()
-                    point_id = str(uuid.uuid4())
-                    
-                    points.append({
-                        "id": point_id,
-                        "vector": vector,
-                        "payload": {
-                            "text": chunk,
-                            "source": filename,
-                            "chunk_id": idx,
-                            "file_hash": file_hash
-                        }
-                    })
-            
-            if points:
-                # Batch upsert for efficiency
-                client.upsert(collection_name=COLLECTION_NAME, points=points)
-                print(f"  Ingested {len(points)} chunks from {filename}")
-                
-                # Update metadata
-                new_metadata[filename] = file_hash
-            else:
-                print(f"Warning: No valid chunks created from {filename}")
-                
-        except Exception as e:
-            print(f"Error processing {filename}: {str(e)}")
-            continue
+        # Extract text
+        reader = PdfReader(str(pdf_path))
+        full_text = ""
+        for page in reader.pages:
+            text = page.extract_text()
+            if text:
+                full_text += text + "\n"
+
+        # Chunk text
+        chunks = chunk_text(full_text)
+        print(f"  Created {len(chunks)} chunks")
+
+        # Build points with enriched payload
+        points = []
+        for idx, chunk in enumerate(chunks):
+            if chunk.strip():
+                vector = embedder.encode(chunk).tolist()
+                point_id = str(uuid.uuid4())
+                points.append({
+                    "id": point_id,
+                    "vector": vector,
+                    "payload": {
+                        "text":     chunk,
+                        "title":    src["title"],
+                        "url":      src["url"],
+                        "chunk_id": idx,
+                        "file_hash": file_hash
+                    }
+                })
+
+        # Upsert to Qdrant
+        if points:
+            client.upsert(collection_name=COLLECTION_NAME, points=points)
+            print(f"  Ingested {len(points)} chunks from {filename}")
+            new_metadata[filename] = file_hash
+        else:
+            print(f"Warning: No valid chunks created from {filename}")
+
     
     # Save updated metadata
     save_metadata(new_metadata)
