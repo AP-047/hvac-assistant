@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, HttpUrl
+from typing import List
 from app.services.retrieval import retrieve_chunks
 from app.services.llm import generate_answer
 
