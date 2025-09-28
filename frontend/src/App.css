@@ -228,3 +228,33 @@ body {
     max-width: 85%;
   }
 }
+
+.source-item {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: #fafafa;
+  border-left: 3px solid #667eea;
+}
+
+.source-item a {
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.source-item a:hover {
+  text-decoration: underline;
+}
+
+.chunk-id {
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.snippet {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.4;
+}
