@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from fastapi.responses import RedirectResponse
 from .routes.chat import router as chat_router
 
 app = FastAPI(title="HVAC Design Assistant API")
@@ -24,7 +25,11 @@ app.include_router(chat_router, prefix="/api")
 async def health_check():
     return {"status": "ok"}
 
+# @app.get("/")
+# async def root():
+#     # Serve favicon or landing icon at root
+#     return FileResponse("app/static/favicon-1-32x32.ico")
+
 @app.get("/")
 async def root():
-    # Serve favicon or landing icon at root
-    return FileResponse("app/static/favicon-1-32x32.ico")
+    return RedirectResponse(url="/docs")
