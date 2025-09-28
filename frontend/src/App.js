@@ -62,14 +62,19 @@ function App() {
             <div key={index} className={`message ${message.type}-message`}>
               <div className="message-content">
                 {message.content}
+
                 {message.sources && (
                   <div className="sources">
                     <strong>Sources:</strong>
-                    <ul>
-                      {message.sources.map((source, i) => (
-                        <li key={i}>{source}</li>
-                      ))}
-                    </ul>
+                    {message.sources.map((s, i) => (
+                      <div key={i} className="source-item">
+                        <a href={s.url} target="_blank" rel="noopener noreferrer">
+                          {s.title}
+                        </a>
+                        <span className="chunk-id"> (chunk {s.chunk_id})</span>
+                        <p className="snippet">{s.snippet}</p>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
