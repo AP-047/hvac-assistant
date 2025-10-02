@@ -10,7 +10,7 @@ app = FastAPI(title="HVAC Design Assistant API")
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Azure deployed frontend
+    allow_origins=["https://hvac-assistant.azurewebsites.net"], # Azure deployed frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
