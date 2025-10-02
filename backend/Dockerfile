@@ -11,6 +11,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
 COPY backend/app/ ./app
 
+# Add robots file for health probe
+COPY backend/robots933456.txt ./robots933456.txt
+
 # Expose port and define startup command
 EXPOSE 8000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
