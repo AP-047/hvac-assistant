@@ -1,21 +1,21 @@
-FROM node:18-alpine
-
+# Stage 1: Build the React app
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Copy package files
-COPY frontend/package.json frontend/package-lock.json* ./ 
+# Copy package files and install dependencies
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm ci --only=production
 
-# Install dependencies
-RUN npm install
-
-# Copy source code
+# Copy the rest of the source code and build
 COPY frontend/ ./
-
-# Build the React app
 RUN npm run build
 
-# Use a simple web server to serve the build
+# Stage 2: Serve with NGINX
 FROM nginx:stable-alpine
-COPY --from=0 /app/build /usr/share/nginx/html
+# Copy built files to NGINX's html directory
+COPY --from=builder /app/build /usr/share/nginx/html
+# Replace default NGINX config with your proxy config
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
