@@ -23,7 +23,10 @@ class ChatResponse(BaseModel):
 async def chat(request: ChatRequest):
     chunks = retrieve_chunks(request.query, top_k=3)
     if not chunks:
-        raise HTTPException(status_code=404, detail="No relevant documents found")
+        # Provide general answer when documents are unavailable
+        prompt = f"Question: {request.query}\nPlease provide a helpful answer about HVAC systems:"
+        answer = generate_answer(prompt)
+        return ChatResponse(answer=answer, sources=[])
 
     context = "\n\n".join(c["text"] for c in chunks)
     prompt = f"Context:\n{context}\n\nQuestion: {request.query}\nAnswer:"
