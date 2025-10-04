@@ -12,8 +12,10 @@ RUN npm run build
 
 # Stage 2: Serve with NGINX
 FROM nginx:stable-alpine
+
 # Copy built files to NGINX's html directory
 COPY --from=builder /app/build /usr/share/nginx/html
+
 # Replace default NGINX config with your proxy config
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
