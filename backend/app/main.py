@@ -34,3 +34,7 @@ async def health_check():
 @app.get("/")
 async def root():
     return RedirectResponse(url="/docs")
+
+@app.get("/health")
+def health():
+    return {"status":"ok"}
