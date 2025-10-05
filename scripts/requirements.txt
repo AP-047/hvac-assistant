@@ -1,4 +1,0 @@
-qdrant-client
-python-dotenv
-PyPDF2
-sentence-transformers
