@@ -1,0 +1,6 @@
+FROM qdrant/qdrant:latest
+
+# Copy in the fully populated storage directory
+COPY qdrant_storage /qdrant/storage
+
+EXPOSE 6333
