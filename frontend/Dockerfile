@@ -16,7 +16,7 @@ FROM nginx:stable-alpine
 # Copy built files to NGINX's html directory
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# Replace default NGINX config with your proxy config
+# Replace default NGINX config with the proxy config
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

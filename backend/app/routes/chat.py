@@ -22,7 +22,7 @@ class ChatResponse(BaseModel):
 @router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        chunks = retrieve_chunks(request.query, top_k=3)  # Reduced back to 3 for token limits
+        chunks = retrieve_chunks(request.query, top_k=3)  # 3 for token limits
         if not chunks:
             raise HTTPException(status_code=404, detail="No relevant HVAC documents found. The knowledge base may be empty or experiencing issues.")
 

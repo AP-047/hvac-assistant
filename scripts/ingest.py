@@ -165,7 +165,7 @@ def ingest_documents(source_dir: str):
     metadata = load_metadata()
     new_metadata = {}
     
-    # Loop over your predefined PDF_SOURCES
+    # Loop over the predefined PDF_SOURCES
     for src in PDF_SOURCES:
         pdf_path = Path(src["path"])
         filename = pdf_path.name

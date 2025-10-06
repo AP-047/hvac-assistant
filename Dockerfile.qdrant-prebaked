@@ -1,6 +1,6 @@
 FROM qdrant/qdrant:latest
 
-# Copy your ingested HVAC data to the container
+# Copy the ingested HVAC data to the container
 COPY qdrant_storage_backup /qdrant/storage
 
 # Set the correct storage path environment variable
