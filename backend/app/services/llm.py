@@ -1,5 +1,16 @@
 import re
 from typing import List, Dict
+from transformers import T5ForConditionalGeneration, T5Tokenizer
+import torch
+
+# Initialize the flan-t5-small model
+model_name = "google/flan-t5-small"
+tokenizer = T5Tokenizer.from_pretrained(model_name)
+model = T5ForConditionalGeneration.from_pretrained(model_name)
+
+# Set device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model.to(device)
 
 def markdown_to_html(text: str) -> str:
     """Convert basic markdown formatting to HTML"""
@@ -268,10 +279,36 @@ Please feel free to ask any HVAC-related questions!"""
     # Convert markdown formatting to HTML
     return markdown_to_html(markdown_response)
 
+def generate_with_flan_t5(prompt: str, max_length: int = 200) -> str:
+    """Generate response using flan-t5-small model"""
+    try:
+        # Tokenize input
+        inputs = tokenizer(prompt, return_tensors="pt", max_length=512, truncation=True)
+        inputs = {key: value.to(device) for key, value in inputs.items()}
+        
+        # Generate response
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_length=max_length,
+                num_beams=4,
+                do_sample=True,
+                temperature=0.7,
+                pad_token_id=tokenizer.eos_token_id
+            )
+        
+        # Decode response
+        response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return response.strip()
+        
+    except Exception as e:
+        print(f"Flan-T5 generation error: {e}")
+        return ""
+
 def generate_answer(prompt: str) -> str:
     """Generate an intelligent, synthesized answer combining retrieved info with HVAC knowledge"""
     try:
-        # Extract context and query from prompt
+        # Extract context and query from prompt  
         parts = prompt.split("Question:")
         if len(parts) < 2:
             return "I need a properly formatted question to provide an answer."
@@ -279,11 +316,27 @@ def generate_answer(prompt: str) -> str:
         context_part = parts[0].replace("Context:", "").strip()
         query = parts[1].replace("Answer based on the context:", "").strip()
         
+        # For basic HVAC questions without context, use flan-t5-small
         if not context_part:
-            return "HVAC stands for Heating, Ventilation, and Air Conditioning. It refers to systems that control indoor environmental conditions including temperature, humidity, and air quality to maintain comfortable and healthy indoor environments."
+            flan_prompt = f"Answer this HVAC question: {query}"
+            flan_response = generate_with_flan_t5(flan_prompt)
+            if flan_response:
+                return markdown_to_html(flan_response)
+            else:
+                return "HVAC stands for Heating, Ventilation, and Air Conditioning. It refers to systems that control indoor environmental conditions including temperature, humidity, and air quality to maintain comfortable and healthy indoor environments."
         
-        # Generate intelligent synthesized response
-        return synthesize_answer(context_part, query)
+        # For questions with context, combine synthesized answer with flan-t5 enhancement
+        synthesized = synthesize_answer(context_part, query)
+        
+        # Use flan-t5 to improve the response if it's too generic
+        if len(synthesized) < 200:
+            flan_prompt = f"Based on this HVAC context: {context_part[:300]}... Answer: {query}"
+            flan_enhancement = generate_with_flan_t5(flan_prompt, max_length=150)
+            if flan_enhancement and len(flan_enhancement) > 50:
+                enhanced_response = f"{flan_enhancement}\n\n{synthesized}"
+                return markdown_to_html(enhanced_response)
+        
+        return synthesized
         
     except Exception as e:
         print(f"Answer generation error: {e}")
