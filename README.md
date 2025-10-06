@@ -198,6 +198,6 @@ This project demonstrates proficiency in:
 
 ---
 
-**Developed by AP-047** | [Portfolio](https://github.com/AP-047) | [LinkedIn](#)
+**Developed by AP-047** | [Portfolio](https://github.com/AP-047) | [LinkedIn](https://www.linkedin.com/in/ap047)
 
 *Built with ❤️ for the HVAC engineering community*
