@@ -1,6 +1,6 @@
 # ☀️🧊 HVAC Design Assistant
 
-**A smart AI-powered chatbot for HVAC engineering guidance using Retrieval-Augmented Generation (RAG)**
+**A smart AI-powered chatbot for HVAC (Heating, ventilation and air conditioning) engineering guidance using RAG (Retrieval-Augmented Generation)**
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge)](https://hvac-assistant.azurewebsites.net)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker)](https://hub.docker.com)
@@ -14,7 +14,7 @@ The HVAC Design Assistant is a full-stack application that demonstrates modern w
 
 ## ✨ Key Features
 
-- **🤖 Intelligent AI Responses**: Powered by Azure OpenAI with context-aware answer synthesis
+- **🤖 Intelligent AI Responses**: Powered by flan-t5-small model with context-aware answer synthesis
 - **📚 Document-Grounded Answers**: RAG implementation using 11 technical HVAC documents processed into 672+ vector embeddings
 - **🎯 Smart Query Filtering**: Automatically detects and handles HVAC-related queries
 - **💬 Real-time Chat Interface**: Responsive React frontend with professional UI/UX
@@ -27,7 +27,7 @@ The HVAC Design Assistant is a full-stack application that demonstrates modern w
 
 ### Backend (FastAPI + Python)
 - **Framework**: FastAPI with async/await patterns
-- **AI Integration**: Azure OpenAI GPT-4 with custom prompt engineering
+- **AI Integration**: Google's flan-t5-small model with custom prompt engineering
 - **Vector Database**: Qdrant for semantic document search
 - **Document Processing**: 11 technical HVAC documents processed into 672+ vector embeddings
 - **Smart Retrieval**: Context-aware document filtering and relevance scoring
@@ -59,7 +59,6 @@ cd hvac-assistant
 # Backend environment
 cd backend
 cp .env.example .env
-# Configure your Azure OpenAI and Qdrant credentials
 
 # Frontend environment  
 cd ../frontend
