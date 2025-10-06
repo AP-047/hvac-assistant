@@ -120,46 +120,13 @@ hvac-assistant/
     └── 📊 ingest.py             # Document vectorization script
 ```
 
-## 🔧 API Documentation
-
-### Chat Endpoint
-```http
-POST /api/chat
-Content-Type: application/json
-
-{
-  "message": "What are the basics of HVAC system design?"
-}
-```
-
-**Response:**
-```json
-{
-  "response": "# HVAC System Design Basics\n\n**HVAC systems** integrate...",
-  "sources": [
-    {
-      "filename": "HVAC_Design_Manual.pdf",
-      "chunk_id": "chunk_123",
-      "snippet": "HVAC system design involves..."
-    }
-  ]
-}
-```
-
-## 🧠 AI & Machine Learning Features
+## 🧠 AI Features
 
 - **Retrieval-Augmented Generation (RAG)**: Combines pre-trained LLM knowledge with domain-specific HVAC documents
 - **Semantic Search**: Vector similarity search using sentence transformers
 - **Context Synthesis**: Intelligent merging of retrieved documents with LLM-generated content
 - **Query Classification**: Automatic detection of HVAC-related vs. general queries
 - **Source Attribution**: Transparent citation of source documents for accountability
-
-## 🎯 Use Cases
-
-- **HVAC Engineers**: Quick reference for design standards and best practices
-- **Students**: Learning resource with authoritative documentation
-- **Consultants**: Rapid access to technical specifications and guidelines
-- **Facility Managers**: Understanding system requirements and maintenance
 
 ## 🔮 Future Enhancements
 
@@ -169,16 +136,6 @@ Content-Type: application/json
 - [ ] **Export Functionality**: Save conversations and generate reports
 - [ ] **API Rate Limiting**: Enhanced security and usage management
 - [ ] **Caching Layer**: Redis integration for improved response times
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## 📄 License
 
