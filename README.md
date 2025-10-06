@@ -8,7 +8,7 @@
 
 ## 🚀 Overview
 
-The HVAC Design Assistant is a sophisticated full-stack application that combines modern web technologies with advanced AI to provide intelligent HVAC engineering consultations. Built with a focus on accuracy and user experience, it leverages Retrieval-Augmented Generation (RAG) to deliver contextually relevant responses backed by authoritative HVAC documentation.
+The HVAC Design Assistant is a full-stack application that demonstrates modern web technologies integrated with AI to provide HVAC engineering guidance. Built as a learning project with focus on user experience, it uses Retrieval-Augmented Generation (RAG) to deliver responses by combining available HVAC documentation with AI-generated insights.
 
 > ℹ️ **Quick Note**: This assistant is currently powered by a limited collection of open-source HVAC documents. Due to copyright restrictions, many comprehensive technical resources cannot be included. Responses are intended as general guidance and may not always reflect the full accuracy or depth of professional standards.
 
