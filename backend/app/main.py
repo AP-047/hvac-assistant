@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 from fastapi.responses import RedirectResponse
 from .routes.chat import router as chat_router
 
-app = FastAPI(title="HVAC Design Assistant API")
+app = FastAPI(title="HVAC Technical Assistant API")
 
 # Enable CORS
 app.add_middleware(

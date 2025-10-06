@@ -38,7 +38,7 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>🏢 HVAC Design Assistant</h1>
+        <h1>🏢 HVAC Technical Assistant</h1>
         <p>Get expert guidance on HVAC system design and calculations</p>
       </header>
 
