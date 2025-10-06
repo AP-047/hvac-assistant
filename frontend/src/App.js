@@ -111,6 +111,10 @@ function App() {
             Send
           </button>
         </form>
+
+        <div className="disclaimer">
+          <p><strong>ℹ️ Quick Note:</strong> This assistant is currently powered by a limited collection of open-source HVAC documents. Due to copyright restrictions, many comprehensive technical resources cannot be included. Responses are intended as general guidance and may not always reflect the full accuracy or depth of professional standards.</p>
+        </div>
       </div>
     </div>
   );
