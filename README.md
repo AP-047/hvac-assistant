@@ -1,4 +1,4 @@
-# ☀️🧊 HVAC Design Assistant
+# ☀️🧊 HVAC Technical Assistant
 
 **A smart AI-powered chatbot for HVAC (Heating, ventilation and air conditioning) engineering guidance using RAG (Retrieval-Augmented Generation)**
 
@@ -8,7 +8,7 @@
 
 ## 🚀 Overview
 
-The HVAC Design Assistant is a full-stack application that demonstrates modern web technologies integrated with Generative AI to provide HVAC engineering guidance. Built as a learning project with focus on user experience, it uses Retrieval-Augmented Generation (RAG) to deliver responses by combining available HVAC documentation with GenAI-powered insights.
+The HVAC Technical Assistant is a full-stack application that demonstrates modern web technologies integrated with Generative AI to provide HVAC technical support and guidance. Built as a learning project with focus on user experience, it uses Retrieval-Augmented Generation (RAG) to deliver responses by combining available HVAC documentation with GenAI-powered insights.
 
 > ℹ️ **Quick Note**: This assistant is currently powered by a limited collection of open-source HVAC documents. Due to copyright restrictions, many comprehensive technical resources cannot be included. Responses are intended as general guidance and may not always reflect the full accuracy or depth of professional standards.
 
