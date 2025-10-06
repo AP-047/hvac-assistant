@@ -15,7 +15,7 @@ def check_collection_health() -> bool:
     """Check if the collection exists and is accessible"""
     try:
         # Skip get_collection() due to schema compatibility issues
-        # Just check if we can count vectors - this is sufficient
+        # Just check vector count
         count = client.count(collection_name=COLLECTION_NAME)
         print(f"Collection '{COLLECTION_NAME}' has {count.count} vectors")
         return count.count > 0
