@@ -13,7 +13,7 @@ The HVAC Design Assistant is a sophisticated full-stack application that combine
 ## ✨ Key Features
 
 - **🤖 Intelligent AI Responses**: Powered by Azure OpenAI with context-aware answer synthesis
-- **📚 Document-Grounded Answers**: RAG implementation using 672+ vectorized HVAC documents
+- **📚 Document-Grounded Answers**: RAG implementation using 11 technical HVAC documents processed into 672+ vector embeddings
 - **🎯 Smart Query Filtering**: Automatically detects and handles HVAC-related queries
 - **💬 Real-time Chat Interface**: Responsive React frontend with professional UI/UX
 - **🔍 Source Attribution**: Transparent source citations for all responses
@@ -27,7 +27,7 @@ The HVAC Design Assistant is a sophisticated full-stack application that combine
 - **Framework**: FastAPI with async/await patterns
 - **AI Integration**: Azure OpenAI GPT-4 with custom prompt engineering
 - **Vector Database**: Qdrant for semantic document search
-- **Document Processing**: 672 HVAC documents vectorized and indexed
+- **Document Processing**: 11 technical HVAC documents processed into 672+ vector embeddings
 - **Smart Retrieval**: Context-aware document filtering and relevance scoring
 
 ### Frontend (React + JavaScript)
