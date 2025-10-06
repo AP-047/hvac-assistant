@@ -26,15 +26,6 @@ app.include_router(chat_router, prefix="/api")
 async def health_check():
     return {"status": "ok"}
 
-# @app.get("/")
-# async def root():
-#     # Serve favicon or landing icon at root
-#     return FileResponse("app/static/favicon-1-32x32.ico")
-
 @app.get("/")
 async def root():
     return RedirectResponse(url="/docs")
-
-@app.get("/health")
-def health():
-    return {"status":"ok"}
