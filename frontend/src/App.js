@@ -17,9 +17,6 @@ function App() {
 
     try {
       const response = await axios.post("/api/chat", { query });
-      // const response = await axios.post("http://backend:8000/api/chat", { query });
-      // const response = await axios.post("http://host.docker.internal:8000/api/chat", { query });
-      // const response = await axios.post("http://localhost:8000/api/chat", { query });
       const botMessage = { 
         type: "bot",
         content: response.data.answer,
