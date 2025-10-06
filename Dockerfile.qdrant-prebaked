@@ -1,0 +1,14 @@
+FROM qdrant/qdrant:latest
+
+# Copy your ingested HVAC data to the container
+COPY qdrant_storage_backup /qdrant/storage
+
+# Set the correct storage path environment variable
+ENV QDRANT__STORAGE__STORAGE_PATH=/qdrant/storage
+
+# Ensure correct permissions
+USER root
+RUN chown -R qdrant:qdrant /qdrant/storage
+USER qdrant
+
+EXPOSE 6333
