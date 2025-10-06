@@ -10,9 +10,7 @@ app = FastAPI(title="HVAC Design Assistant API")
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=["https://<hvac-frontend-app>.azurewebsites.net"], # Azure deployed frontend
     allow_origins=["http://frontend:3000"], # Docker container origin
-    # allow_origins=["http://backend:8000/api/chat"],
     # allow_origins=["http://localhost:3000"],
     # allow_origins=["*"],
     allow_credentials=True,
@@ -29,11 +27,6 @@ app.include_router(chat_router, prefix="/api")
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
-
-# @app.get("/")
-# async def root():
-#     # Serve favicon or landing icon at root
-#     return FileResponse("app/static/favicon-1-32x32.ico")
 
 @app.get("/")
 async def root():
