@@ -4,6 +4,7 @@ uvicorn[standard]==0.24.0
 pydantic==2.5.0
 python-dotenv==1.0.0
 qdrant-client==1.7.0
+requests==2.31.0
 
 sentence-transformers==2.2.2
 huggingface_hub>=0.16.4,<1.0
