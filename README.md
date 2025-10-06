@@ -120,14 +120,6 @@ hvac-assistant/
     └── 📊 ingest.py             # Document vectorization script
 ```
 
-## 🧠 AI Features
-
-- **Retrieval-Augmented Generation (RAG)**: Combines pre-trained LLM knowledge with domain-specific HVAC documents
-- **Semantic Search**: Vector similarity search using sentence transformers
-- **Context Synthesis**: Intelligent merging of retrieved documents with LLM-generated content
-- **Query Classification**: Automatic detection of HVAC-related vs. general queries
-- **Source Attribution**: Transparent citation of source documents for accountability
-
 ## 🔮 Future Enhancements
 
 - [ ] **Multi-language Support**: Internationalization for global users
@@ -140,18 +132,6 @@ hvac-assistant/
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🏆 Technical Highlights
-
-This project demonstrates proficiency in:
-
-- **Full-Stack Development**: React frontend + FastAPI backend integration
-- **AI/ML Engineering**: RAG implementation with vector databases
-- **Cloud Architecture**: Azure deployment with container orchestration  
-- **DevOps Practices**: Docker containerization and automated deployments
-- **API Design**: RESTful API with proper error handling and documentation
-- **Database Management**: Vector database optimization and query performance
-- **UI/UX Design**: Responsive, accessible interface with modern design patterns
 
 ---
 
