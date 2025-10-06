@@ -49,10 +49,10 @@ function App() {
               <h3>Welcome! How can I help you with HVAC design today?</h3>
               <div className="sample-questions">
                 <button onClick={() => setQuery("What is an HVAC system?")}>
-                  Sample: Calculate cooling load
+                  Sample: What is an HVAC system?
                 </button>
                 <button onClick={() => setQuery("What HVAC system is best suited for a pharmaceutical lab?")}>
-                  Sample: Ventilation requirements
+                  Sample: What HVAC system is best suited for a pharmaceutical lab?
                 </button>
               </div>
             </div>
