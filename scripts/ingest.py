@@ -105,7 +105,7 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> list:
         chunk = " ".join(words[i : i + chunk_size])
         if chunk.strip():  # Only add non-empty chunks
             chunks.append(chunk)
-        # Break if we've reached the end
+        # Break if reached the end
         if i + chunk_size >= len(words):
             break
     return chunks
@@ -165,7 +165,7 @@ def ingest_documents(source_dir: str):
     metadata = load_metadata()
     new_metadata = {}
     
-    # Loop over your predefined PDF_SOURCES
+    # Loop over the predefined PDF_SOURCES
     for src in PDF_SOURCES:
         pdf_path = Path(src["path"])
         filename = pdf_path.name
