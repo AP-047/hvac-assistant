@@ -1,6 +1,6 @@
 # ☀️🧊 HVAC Design Assistant
 
-**A smart AI-powered chatbot for HVAC engineering guidance using Retrieval-Augmented Generation (RAG)**
+**A smart AI-powered chatbot for HVAC (Heating, ventilation and air conditioning) engineering guidance using Retrieval-Augmented Generation (RAG)**
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge)](https://hvac-assistant.azurewebsites.net)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker)](https://hub.docker.com)
