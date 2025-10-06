@@ -97,46 +97,69 @@ def save_metadata(metadata: Dict[str, str]):
     with open(METADATA_FILE, 'w') as f:
         json.dump(metadata, f, indent=2)
 
-def chunk_text(text: str, max_len: int = 500) -> list:
-    """Split text into chunks"""
+def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> list:
+    """Split text into overlapping chunks for better context preservation"""
     words = text.split()
     chunks = []
-    for i in range(0, len(words), max_len):
-        chunks.append(" ".join(words[i : i + max_len]))
+    for i in range(0, len(words), chunk_size - overlap):
+        chunk = " ".join(words[i : i + chunk_size])
+        if chunk.strip():  # Only add non-empty chunks
+            chunks.append(chunk)
+        # Break if we've reached the end
+        if i + chunk_size >= len(words):
+            break
     return chunks
 
 
-def create_collection_if_not_exists():
-    """Ensure Qdrant collection exists; ignore config parse or already-exists errors."""
+def check_qdrant_health():
+    """Check if Qdrant is healthy and accessible"""
     try:
-        client.get_collection(COLLECTION_NAME)
-        print(f"Collection '{COLLECTION_NAME}' already exists")
-    except ResponseHandlingException:
-        # Parsing error from older/newer Qdrant schemas
-        print(f"Warning: Could not parse existing collection config, assuming it exists")
-        return
-    except UnexpectedResponse:
-        # Collection does not exist at all
-        pass
+        collections = client.get_collections()
+        print(f"Qdrant is healthy. Collections: {[c.name for c in collections.collections]}")
+        return True
+    except Exception as e:
+        print(f"Qdrant health check failed: {e}")
+        return False
 
-    # If we reach here, either get_collection failed with UnexpectedResponse or
-    # we explicitly want to create it
+def create_collection_if_not_exists():
+    """Ensure Qdrant collection exists with robust error handling"""
+    try:
+        # Check if collection exists by trying to count vectors
+        count = client.count(collection_name=COLLECTION_NAME)
+        print(f"Collection '{COLLECTION_NAME}' already exists with {count.count} vectors")
+        return True
+    except Exception as e:
+        print(f"Collection doesn't exist or needs recreation: {e}")
+        
+    # Try to delete collection if it exists but is corrupted
+    try:
+        client.delete_collection(COLLECTION_NAME)
+        print(f"Deleted existing collection '{COLLECTION_NAME}'")
+    except Exception:
+        print(f"No existing collection to delete")
+        
+    # Create fresh collection
     try:
         client.create_collection(
             collection_name=COLLECTION_NAME,
             vectors_config=VectorParams(size=384, distance=Distance.COSINE),
         )
-        print(f"Created collection '{COLLECTION_NAME}'")
-    except UnexpectedResponse as e:
-        # 409 Conflict means it already exists—safe to ignore
-        if "already exists" in str(e):
-            print(f"Collection '{COLLECTION_NAME}' already exists (409), continuing")
-        else:
-            raise
+        print(f"Successfully created collection '{COLLECTION_NAME}'")
+        return True
+    except Exception as e:
+        print(f"Failed to create collection: {e}")
+        return False
 
 def ingest_documents(source_dir: str):
     """Ingest new or modified documents"""
-    create_collection_if_not_exists()
+    # Check Qdrant health first
+    if not check_qdrant_health():
+        print("Qdrant is not healthy. Exiting.")
+        return
+        
+    if not create_collection_if_not_exists():
+        print("Failed to create/verify collection. Exiting.")
+        return
     
     # Load existing metadata
     metadata = load_metadata()
