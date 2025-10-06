@@ -152,19 +152,19 @@ The specific design and configuration depend on building size, occupancy, climat
 This represents established industry practices where systems are designed with careful consideration of thermal loads, air quality requirements, and energy efficiency standards. Professional HVAC design involves complex calculations for sizing equipment, determining air flow rates, and selecting appropriate components for the specific application.
 
 **Key design factors include:**
-• Building envelope characteristics and thermal loads
-• Occupancy patterns and ventilation requirements  
-• Local climate conditions and seasonal variations
-• Energy codes and sustainability objectives
-• Integration with building automation systems"""
+  Building envelope characteristics and thermal loads
+  Occupancy patterns and ventilation requirements  
+  Local climate conditions and seasonal variations
+  Energy codes and sustainability objectives
+  Integration with building automation systems"""
                 else:
                     markdown_response = f"""I don't have specific technical documentation about this topic in the HVAC knowledge base. For detailed information about specific HVAC components, systems, or calculations, please try asking about:
 
-• HVAC system types and components
-• Heating and cooling equipment specifications
-• Ventilation requirements and air quality
-• Energy efficiency and system design
-• Maintenance and troubleshooting procedures"""
+  HVAC system types and components
+  Heating and cooling equipment specifications
+  Ventilation requirements and air quality
+  Energy efficiency and system design
+  Maintenance and troubleshooting procedures"""
 
         elif "how" in query.lower():
             # For process questions, explain operation with documentation context
@@ -177,17 +177,17 @@ This represents established industry practices where systems are designed with c
 This process demonstrates the sophisticated control systems modern HVAC installations employ. Temperature sensors continuously monitor conditions, while automated controls adjust equipment operation to maintain setpoints efficiently. The system balances heating, cooling, and ventilation loads while optimizing energy consumption through variable-speed drives, economizer cycles, and smart scheduling.
 
 **Operational considerations:**
-• Sensor-based feedback control for precise temperature regulation
-• Load balancing across multiple zones or spaces
-• Integration with building management systems for coordinated operation
-• Preventive maintenance scheduling to ensure optimal performance"""
+  Sensor-based feedback control for precise temperature regulation
+  Load balancing across multiple zones or spaces
+  Integration with building management systems for coordinated operation
+  Preventive maintenance scheduling to ensure optimal performance"""
             else:
                 markdown_response = f"""I don't have specific procedural information about this in the HVAC documentation. For detailed operational procedures, please ask about specific HVAC processes such as:
 
-• System startup and commissioning procedures
-• Equipment operation and control sequences  
-• Maintenance and troubleshooting steps
-• Energy optimization strategies"""
+  System startup and commissioning procedures
+  Equipment operation and control sequences  
+  Maintenance and troubleshooting steps
+  Energy optimization strategies"""
 
         elif any(word in query.lower() for word in ['best', 'suited', 'recommend', 'choose', 'select']):
             # For recommendation questions, provide expert guidance with documentation
