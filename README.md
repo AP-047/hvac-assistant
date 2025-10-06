@@ -44,14 +44,6 @@ The HVAC Design Assistant is a sophisticated full-stack application that combine
 - **Database**: Qdrant vector database for document embeddings
 - **CI/CD**: Docker-based deployment pipeline
 
-## 📋 Prerequisites
-
-- **Node.js** 18+ and npm
-- **Python** 3.11+ with pip
-- **Docker** and Docker Compose
-- **Azure OpenAI** API access
-- **Qdrant** vector database
-
 ## 🚀 Quick Start
 
 ### 1. Clone the Repository
