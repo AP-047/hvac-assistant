@@ -26,7 +26,7 @@ function App() {
     } catch (error) {
       const errorMessage = { 
         type: "error", 
-        content: "Sorry, I encountered an error. Please try again." 
+        content: "Sorry, something went wrong. Try again or check if your question relates to HVAC systems." 
       };
       setMessages(prev => [...prev, errorMessage]);
     }
@@ -38,8 +38,8 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>🏢 HVAC Design Assistant</h1>
-        <p>Get expert guidance on HVAC system design and calculations</p>
+        <h1>☀️🧊 HVAC Design Assistant</h1>
+        <p>Smart HVAC (Heating, ventilation and air conditioning) guidance sourced from verified technical publications and engineering documents</p>
       </header>
 
       <div className="chat-container">
@@ -61,7 +61,11 @@ function App() {
           {messages.map((message, index) => (
             <div key={index} className={`message ${message.type}-message`}>
               <div className="message-content">
-                {message.content}
+                {message.type === 'bot' ? (
+                  <div dangerouslySetInnerHTML={{ __html: message.content }} />
+                ) : (
+                  message.content
+                )}
 
                 {message.sources && (
                   <div className="sources">
