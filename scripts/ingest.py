@@ -73,11 +73,12 @@ PDF_SOURCES = [
 load_dotenv()
 
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", None)
 COLLECTION_NAME = "hvac_docs"
 METADATA_FILE = "ingested_files.json"
 
 # Initialize clients
-client = QdrantClient(url=QDRANT_URL)
+client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 def get_file_hash(file_path: Path) -> str:

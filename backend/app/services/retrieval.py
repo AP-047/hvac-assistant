@@ -6,25 +6,37 @@ from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 
 # Environment and constants
-QDRANT_URL = os.getenv("QDRANT_URL", "https://hvac-qdrant.azurewebsites.net")
+QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", None)
 COLLECTION_NAME = "hvac_docs"
 
 # Initialize embedder once
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
+def get_headers():
+    headers = {}
+    if QDRANT_API_KEY:
+        headers["api-key"] = QDRANT_API_KEY
+    return headers
+
 def get_qdrant_client():
     """Create a new Qdrant client with conservative settings"""
     return QdrantClient(
         url=QDRANT_URL, 
+        api_key=QDRANT_API_KEY,
         timeout=60,  # Reduced timeout for faster failure
-        prefer_grpc=False  # Use HTTP instead of gRPC for better Azure compatibility
+        prefer_grpc=False  # Use HTTP instead of gRPC
     )
 
 def check_collection_health() -> bool:
     """Check if the collection exists and is accessible using HTTP only (faster)"""
     try:
         print("Checking collection health via HTTP...")
-        response = requests.get(f'{QDRANT_URL}/collections/{COLLECTION_NAME}', timeout=15)
+        response = requests.get(
+            f'{QDRANT_URL}/collections/{COLLECTION_NAME}',
+            headers=get_headers(),
+            timeout=15
+        )
         if response.status_code == 200:
             data = response.json()
             points_count = data.get('result', {}).get('points_count', 0)
@@ -86,6 +98,7 @@ def retrieve_chunks(query: str, top_k: int = 3) -> List[Dict[str, Any]]:
             response = requests.post(
                 f'{QDRANT_URL}/collections/{COLLECTION_NAME}/points/search',
                 json=search_payload,
+                headers=get_headers(),
                 timeout=30
             )
             

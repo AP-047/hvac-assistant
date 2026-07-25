@@ -3,7 +3,7 @@
 echo "Starting HVAC Assistant Backend..."
 
 # Wait for Qdrant to be available
-QDRANT_URL="${QDRANT_URL:-https://hvac-qdrant.azurewebsites.net}"
+QDRANT_URL="${QDRANT_URL:-http://qdrant:6333}"
 echo "Waiting for Qdrant to be available at: $QDRANT_URL"
 max_attempts=6  # (1 minute total)
 attempt=0
@@ -13,9 +13,15 @@ while [ $attempt -lt $max_attempts ]; do
     check_result=$(python -c "
 import requests
 import sys
+import os
+
+url = os.getenv('QDRANT_URL', '$QDRANT_URL')
+api_key = os.getenv('QDRANT_API_KEY', '')
+headers = {'api-key': api_key} if api_key else {}
+
 try:
-    print(f'Checking: $QDRANT_URL')
-    response = requests.get('$QDRANT_URL', timeout=10)
+    print(f'Checking: {url}')
+    response = requests.get(url, headers=headers, timeout=10)
     print(f'Response: {response.status_code}')
     if response.status_code == 200:
         print('SUCCESS')
@@ -53,10 +59,12 @@ else
 import requests
 import os
 
-url = os.getenv('QDRANT_URL', 'https://hvac-qdrant.azurewebsites.net')
+url = os.getenv('QDRANT_URL', '$QDRANT_URL')
+api_key = os.getenv('QDRANT_API_KEY', '')
+headers = {'api-key': api_key} if api_key else {}
 
 try:
-    response = requests.get(f'{url}/collections/hvac_docs', timeout=30)
+    response = requests.get(f'{url}/collections/hvac_docs', headers=headers, timeout=30)
     
     if response.status_code == 200:
         data = response.json()
@@ -79,4 +87,4 @@ fi
 
 # Start the FastAPI server
 echo "🚀 Starting FastAPI server..."
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
