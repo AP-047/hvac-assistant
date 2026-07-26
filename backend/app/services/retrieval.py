@@ -9,15 +9,15 @@ QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", None)
 COLLECTION_NAME = "hvac_docs"
 
-# Lazy load embedder
+# Lazy load fastembed ONNX embedder (~35MB RAM footprint)
 _embedder = None
 
 def get_embedder():
     global _embedder
     if _embedder is None:
-        print("Loading SentenceTransformer model...")
-        from sentence_transformers import SentenceTransformer
-        _embedder = SentenceTransformer("all-MiniLM-L6-v2")
+        print("Loading fastembed ONNX model (~35MB RAM)...")
+        from fastembed import TextEmbedding
+        _embedder = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
     return _embedder
 
 def get_headers():
@@ -87,8 +87,9 @@ def retrieve_chunks(query: str, top_k: int = 3) -> List[Dict[str, Any]]:
             print(f"Collection '{COLLECTION_NAME}' is not available or empty")
             return []
 
-        # 1. Embed user query
-        query_vector = get_embedder().encode(query).tolist()
+        # 1. Embed user query via fastembed ONNX
+        embeddings = list(get_embedder().embed([query]))
+        query_vector = embeddings[0].tolist()
 
         # 2. Use HTTP search directly (faster and more reliable)
         print("Searching via HTTP API...")
