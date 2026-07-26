@@ -10,8 +10,15 @@ QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", None)
 COLLECTION_NAME = "hvac_docs"
 
-# Initialize embedder once
-embedder = SentenceTransformer("all-MiniLM-L6-v2")
+# Lazy load embedder
+_embedder = None
+
+def get_embedder():
+    global _embedder
+    if _embedder is None:
+        print("Loading SentenceTransformer model...")
+        _embedder = SentenceTransformer("all-MiniLM-L6-v2")
+    return _embedder
 
 def get_headers():
     headers = {}
@@ -81,7 +88,7 @@ def retrieve_chunks(query: str, top_k: int = 3) -> List[Dict[str, Any]]:
             return []
 
         # 1. Embed user query
-        query_vector = embedder.encode(query).tolist()
+        query_vector = get_embedder().encode(query).tolist()
 
         # 2. Use HTTP search directly (faster and more reliable)
         print("Searching via HTTP API...")
