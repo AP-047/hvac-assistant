@@ -61,5 +61,7 @@ logs/
 .dockerignore
 
 # Environment variables
-.env.local
-.env.production
+.env
+.env.*
+*.env
+*.key
