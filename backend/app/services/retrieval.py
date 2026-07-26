@@ -1,9 +1,7 @@
 import os
 import time
 import requests
-from typing import List, Dict, Any
 from qdrant_client import QdrantClient
-from sentence_transformers import SentenceTransformer
 
 # Environment and constants
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
@@ -17,6 +15,7 @@ def get_embedder():
     global _embedder
     if _embedder is None:
         print("Loading SentenceTransformer model...")
+        from sentence_transformers import SentenceTransformer
         _embedder = SentenceTransformer("all-MiniLM-L6-v2")
     return _embedder
 
