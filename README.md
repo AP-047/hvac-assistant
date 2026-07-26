@@ -7,7 +7,10 @@
 [![Render](https://img.shields.io/badge/Render-Backend-46E3B7?style=for-the-badge&logo=render)](https://render.com)
 [![Qdrant](https://img.shields.io/badge/Qdrant-Vector_DB-DC2626?style=for-the-badge&logo=qdrant)](https://qdrant.tech)
 
-## 🚀 Overview
+## 🚀 Overview & Live Demo
+
+- 🌐 **Live Web Application**: [https://hvac-assistant-55ne.onrender.com](https://hvac-assistant-55ne.onrender.com)
+- ⚡ **Backend API Docs**: [https://hvac-assistant-pq4v.onrender.com/docs](https://hvac-assistant-pq4v.onrender.com/docs)
 
 The HVAC Technical Assistant is a full-stack application that demonstrates modern web technologies integrated with Generative AI to provide HVAC technical support and guidance. Built with a focus on user experience and scalability, it uses Retrieval-Augmented Generation (RAG) to deliver responses by combining technical HVAC documentation with GenAI-powered insights.
 
