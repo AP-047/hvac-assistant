@@ -1,3 +1,4 @@
+import threading
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -14,6 +15,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+def prewarm_embedder():
+    try:
+        from .services.retrieval import get_embedder
+        print("⏳ Background pre-warming embedder model...")
+        get_embedder()
+        print("✅ Embedder model ready for instant answers!")
+    except Exception as e:
+        print(f"Embedder pre-warm error: {e}")
+
+@app.on_event("startup")
+async def startup_event():
+    threading.Thread(target=prewarm_embedder, daemon=True).start()
 
 # Include chat API routes under /api
 app.include_router(chat_router, prefix="/api")
