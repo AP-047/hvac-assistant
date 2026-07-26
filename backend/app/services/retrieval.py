@@ -1,6 +1,7 @@
 import os
 import time
 import requests
+from typing import List, Dict, Any
 from qdrant_client import QdrantClient
 
 # Environment and constants
