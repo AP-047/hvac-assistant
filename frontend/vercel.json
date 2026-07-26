@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://YOUR_HUGGINGFACE_SPACE_NAME.hf.space/api/:path*"
+      "destination": "https://hvac-assistant-pq4v.onrender.com/api/:path*"
     }
   ]
 }
